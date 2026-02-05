@@ -137,7 +137,7 @@ Edit the `.feature-card` sections in `index.html`:
 ### Update Social Links
 Replace `#` in social icons with actual URLs:
 ```html
-<a href="https://pinterest.com/yourprofile" class="social-icon">
+<a href="https://pinterest.com/PetPalsApartment" class="social-icon">
 ```
 
 ---
