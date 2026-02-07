@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wellness Complete Health Adult | Premium Dog Food</title>
+    <link rel="stylesheet" href="wellness-dog.css">
+</head>
+<body>
+    <!-- ================================
+         HEADER
+         ================================ -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">🐾 Pet Pals</a>
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#gallery">Gallery</a></li>
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="products.html" class="active">Shop</a></li>
+                <li><a href="index.html#social">Connect</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="product-section">
+            <div class="product-grid">
+                <!-- Product Images -->
+                <div class="product-images">
+                    <img id="mainImage" src="images/Chewy-img-1.png" alt="Wellness Complete Health Dog Food" class="main-image">
+                    <div class="thumbnail-grid">
+                        <img src="images/Chewy-img-1.png" alt="Product view 1" class="thumbnail active" onclick="changeImage(this)">
+                        <img src="images/Chewy-img-3.png" alt="Product view 2" class="thumbnail" onclick="changeImage(this)">
+                        <img src="images/Chewy-img-2.png" alt="Product view 3" class="thumbnail" onclick="changeImage(this)">
+                        <img src="images/Chewy-img-5.png" alt="Product view 4" class="thumbnail" onclick="changeImage(this)">
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <h1>Wellness Complete Health Natural Adult Dry Dog Food, Barley, Deboned Chicken & Oatmeal, Lamb & Barley, Whitefish & Sweet Potato</h1>
+                    
+                    <div class="rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="review-count">4.5 out of 5 stars (12,847 reviews)</span>
+                    </div>
+
+                    <div class="price-section">
+                        <div>
+                            <span class="price">$59.98</span>
+                            <span class="original-price">$85.99</span>
+                        </div>
+                        <div class="savings">Save 30% with Subscribe & Save</div>
+                    </div>
+
+                    <div class="autoship">
+                        <strong>🚚 Free Delivery with Autoship</strong>
+                        <p>Set up recurring orders and never run out. Cancel or modify anytime.</p>
+                    </div>
+                        </div>
+                    </div>
+
+                    <a href="https://mavely.app.link/IbeHvwmCz0b" target="_blank" rel="noopener noreferrer" class="btn btn-chewy">
+                        🛒 View on website
+                    </a>
+
+                    <div class="wellness-promise">
+                        <strong>🌟 The Wellness Promise</strong>
+                        <p>Made in the USA with globally sourced ingredients. No meat by-products, wheat, corn, soy, or artificial preservatives.</p>
+                    </div>
+
+                    <div class="features">
+                        <h3>Key Benefits</h3>
+                        <ul>
+                            <li>Premium protein from deboned chicken for strong muscles</li>
+                            <li>Wholesome grains including brown rice and barley</li>
+                            <li>Omega fatty acids for healthy skin and coat</li>
+                            <li>Glucosamine and chondroitin for joint support</li>
+                            <li>Probiotics for digestive health</li>
+                            <li>Antioxidants for immune system support</li>
+                            <li>Taurine for healthy heart function</li>
+                        </ul>
+                    </div>
+
+                    <div class="trust-badges">
+                        <div class="badge">
+                            <div class="badge-icon">🇺🇸</div>
+                            <div><strong>Made in USA</strong></div>
+                        </div>
+                        <div class="badge">
+                            <div class="badge-icon">✓</div>
+                            <div><strong>AAFCO Approved</strong></div>
+                        </div>
+                        <div class="badge">
+                            <div class="badge-icon">🌿</div>
+                            <div><strong>All Natural</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Details Tabs -->
+            <div class="tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="openTab(event, 'description')">Description</button>
+                    <button class="tab-button" onclick="openTab(event, 'ingredients')">Ingredients</button>
+                    <button class="tab-button" onclick="openTab(event, 'feeding')">Feeding Guide</button>
+                    <button class="tab-button" onclick="openTab(event, 'analysis')">Guaranteed Analysis</button>
+                </div>
+
+                <div id="description" class="tab-content active">
+                    <h3>About This Item</h3>
+                    <p><strong>Wellness Complete Health</strong> recipes are thoughtfully crafted to support the 5 Signs of Wellbeing. With every meal comes balanced, vet-recommended nutrition made with high-quality ingredients—so you can continue to live your best lives together.</p>
+                    
+                    <p>This recipe is specially formulated with ingredients to help support:</p>
+                    <ul>
+                        <li><strong>Sustained Energy:</strong> High-quality proteins provide the building blocks for lean muscle mass and energy</li>
+                        <li><strong>Healthy Digestion:</strong> Probiotics and prebiotic fiber support digestive health</li>
+                        <li><strong>Healthy Skin & Coat:</strong> Omega fatty acids from flaxseed and salmon oil</li>
+                        <li><strong>Immune Health:</strong> Antioxidant-rich fruits and vegetables</li>
+                        <li><strong>Healthy Teeth & Bones:</strong> Balanced calcium and phosphorus levels</li>
+                    </ul>
+
+                    <p>Created by nutritionists, veterinarians, and animal lovers, this recipe provides an ideal balance of nature's finest ingredients, carefully selected to nourish and sustain your dog's wellbeing.</p>
+                </div>
+
+                <div id="ingredients" class="tab-content">
+                    <h3>Ingredients</h3>
+                    <p><strong>Deboned Chicken, Chicken Meal</strong> (source of Glucosamine and Chondroitin Sulfate), <strong>Brown Rice, Barley</strong>, Peas, Oatmeal, Oats, Dried Plain Beet Pulp, Chicken Fat, Salmon Meal, Natural Flavor, Flaxseed, Dried Chicory Root, Choline Chloride, Spinach, Broccoli, Vitamin E Supplement, Carrots, Parsley, Taurine, Apples, Blueberries, Kale, Mixed Tocopherols added to preserve freshness, Calcium Carbonate, Niacin, Zinc Proteinate, Ferrous Sulfate, Zinc Sulfate, Vitamin A Supplement, Iron Proteinate, Ascorbic Acid (Vitamin C), Thiamine Mononitrate, d-Calcium Pantothenate, Sodium Selenite, Pyridoxine Hydrochloride, Copper Sulfate, Manganese Sulfate, Riboflavin, Manganese Proteinate, Copper Proteinate, Biotin, Vitamin D3 Supplement, Yucca Schidigera Extract, Vitamin B12 Supplement, Folic Acid, Calcium Iodate, Dried Enterococcus faecium Fermentation Product, Dried Bacillus licheniformis Fermentation Product, Dried Bacillus subtilis Fermentation Product, Rosemary Extract, Green Tea Extract, Spearmint Extract.</p>
+                    
+                    <p><em>This is a naturally preserved product.</em></p>
+                </div>
+
+                <div id="feeding" class="tab-content">
+                    <h3>Feeding Guidelines</h3>
+                    <div class="feeding-guide">
+                        <p><strong>Important:</strong> It is important to slowly transition your dog from their current diet as it takes a few days for the body to adapt to new nutrient levels. To transition, gradually mix in the new food over a 5-7 day period, increasing the amount of Wellness each day, so that you are feeding 100% Wellness by day 7.</p>
+                    </div>
+                    
+                    <table class="ingredients-table">
+                        <thead>
+                            <tr>
+                                <th>Dog Weight</th>
+                                <th>Daily Feeding Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>5-15 lbs</td>
+                                <td>1/2 - 1 1/4 cups</td>
+                            </tr>
+                            <tr>
+                                <td>15-25 lbs</td>
+                                <td>1 1/4 - 1 3/4 cups</td>
+                            </tr>
+                            <tr>
+                                <td>25-40 lbs</td>
+                                <td>1 3/4 - 2 1/2 cups</td>
+                            </tr>
+                            <tr>
+                                <td>40-60 lbs</td>
+                                <td>2 1/2 - 3 1/4 cups</td>
+                            </tr>
+                            <tr>
+                                <td>60-80 lbs</td>
+                                <td>3 1/4 - 4 cups</td>
+                            </tr>
+                            <tr>
+                                <td>80-100 lbs</td>
+                                <td>4 - 4 3/4 cups</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <p><strong>Combination Feeding:</strong> If feeding with Wellness wet food, reduce dry amount fed by 1/3 cup for every 6 oz of wet food.</p>
+                </div>
+
+                <div id="analysis" class="tab-content">
+                    <h3>Guaranteed Analysis</h3>
+                    <table class="ingredients-table">
+                        <tbody>
+                            <tr>
+                                <td><strong>Crude Protein</strong></td>
+                                <td>Not Less Than 26.0%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Crude Fat</strong></td>
+                                <td>Not Less Than 12.0%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Crude Fiber</strong></td>
+                                <td>Not More Than 5.0%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Moisture</strong></td>
+                                <td>Not More Than 11.0%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Calcium</strong></td>
+                                <td>Not Less Than 1.25%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phosphorus</strong></td>
+                                <td>Not Less Than 0.90%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Omega-6 Fatty Acids*</strong></td>
+                                <td>Not Less Than 3.25%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Omega-3 Fatty Acids*</strong></td>
+                                <td>Not Less Than 0.50%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Glucosamine*</strong></td>
+                                <td>Not Less Than 750 mg/kg</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Chondroitin Sulfate*</strong></td>
+                                <td>Not Less Than 250 mg/kg</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <p><em>*Not recognized as an essential nutrient by the AAFCO Dog Food Nutrient Profiles.</em></p>
+                    
+                    <p><strong>Caloric Content:</strong> 3,576 kcal/kg, 340 kcal/cup</p>
+                    
+                    <div class="wellness-promise">
+                        <strong>AAFCO Statement:</strong>
+                        <p>This food is formulated to meet the nutritional levels established by the AAFCO Dog Food Nutrient Profiles for maintenance of adult dogs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="guarantee-banner">
+                <h2>100% Satisfaction Guaranteed</h2>
+                <p>We stand behind every bag. If you're not completely satisfied, we'll make it right.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================================
+         FOOTER
+         ================================ -->
+    <footer>
+        <p>&copy; 2025-2026 Solontrich. All rights reserved.</p>
+        <p>This website contains affiliate links. We may earn a commission from qualifying purchases.</p>
+        <p>🐾 Pet Pals · Made with ❤️ for apartment pet parents everywhere</p>
+    </footer>
+
+    <script src="wellness-dog.js"></script>
+</body>
+</html>
