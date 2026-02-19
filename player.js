@@ -1,65 +1,34 @@
-// ── SONG DATA ────────────────────────────────────────────
-// Replace src/cover/artist/album with your real files.
-// Using placeholder cover art from picsum for demo visuals.
-const songs = [
-  {
-    title:    "My Darling Isabella (House-2026)",
-    artist:   "Dj online",
-    album:    "The Rise",
-    src:      "My-Darling-Isabella-(House-2026).mp3",
-    cover:    "DJPortrait.png",
-    duration: "2:43"
-  },
-  {
-    title:    "You never fully dressed without a smile (House 2026)",
-    artist:   "Dj online",
-    album:    "The Rise",
-    src:      "You-never-fully-dressed-without-a-smile-(House-2026).mp3",
-    cover:    "DJPortrait.png",
-    duration: "2:57"
-  },
-  {
-    title:    "Static Rain",
-    artist:   "The Void Signal",
-    album:    "Frequencies",
-    src:      "song3.mp3",
-    cover:    "https://picsum.photos/seed/static/200/200",
-    duration: "2:58"
-  },
-  {
-    title:    "Deep Circuit",
-    artist:   "Neural Wave",
-    album:    "City Lights",
-    src:      "song4.mp3",
-    cover:    "https://picsum.photos/seed/deepcircuit/200/200",
-    duration: "5:01"
-  },
-  {
-    title:    "Glass Mirror",
-    artist:   "Lo-Fi Collective",
-    album:    "Reflect",
-    src:      "song5.mp3",
-    cover:    "https://picsum.photos/seed/glassmirror/200/200",
-    duration: "3:27"
-  },
-  {
-    title:    "Horizon Code",
-    artist:   "Synthwave Archive",
-    album:    "Frequencies",
-    src:      "song6.mp3",
-    cover:    "https://picsum.photos/seed/horizon/200/200",
-    duration: "4:44"
-  }
-];
+// ── SONG DATA ─────────────────────────────────────────────
+// Managed via admin.html → saved to localStorage under this key
+const STORAGE_KEY = 'wave_songs';
+
+function getSongs() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (Array.isArray(stored) && stored.length > 0) return stored;
+  } catch (_) {}
+  return [];
+}
+
+const songs = getSongs();
 
 // ── STATE ─────────────────────────────────────────────────
 let currentIdx = -1;
 let wavesurfer  = null;
 let isFading    = false;
 
-// ── WAVESURFER INIT ───────────────────────────────────────
+// ── EMPTY STATE ───────────────────────────────────────────
+if (songs.length === 0) {
+  document.getElementById('track-title').textContent  = 'No tracks loaded';
+  document.getElementById('track-artist').textContent = 'Open admin.html to add music →';
+}
+
+// ── WAVESURFER INIT (v7 API) ──────────────────────────────
 function initWaveSurfer() {
-  if (wavesurfer) { wavesurfer.destroy(); }
+  if (wavesurfer) {
+    wavesurfer.destroy();
+    wavesurfer = null;
+  }
 
   wavesurfer = WaveSurfer.create({
     container:     '#waveform',
@@ -72,24 +41,29 @@ function initWaveSurfer() {
     barRadius:     2,
     height:        50,
     normalize:     true,
-    backend:       'WebAudio',
     interact:      true,
-    hideScrollbar: true,
   });
 
+  // v7: 'ready' fires after decode, use 'decode' or 'ready'
   wavesurfer.on('ready', () => {
-    const total = wavesurfer.getDuration();
-    document.getElementById('time-total').textContent = formatTime(total);
+    document.getElementById('time-total').textContent = formatTime(wavesurfer.getDuration());
     wavesurfer.play();
   });
 
-  wavesurfer.on('audioprocess', () => {
-    document.getElementById('time-cur').textContent = formatTime(wavesurfer.getCurrentTime());
+  // v7: 'audioprocess' renamed to 'timeupdate'
+  wavesurfer.on('timeupdate', (currentTime) => {
+    document.getElementById('time-cur').textContent = formatTime(currentTime);
   });
 
-  wavesurfer.on('play',   () => { document.body.classList.add('playing'); });
-  wavesurfer.on('pause',  () => { document.body.classList.remove('playing'); });
-  wavesurfer.on('finish', () => { nextSong(); });
+  wavesurfer.on('play',   () => document.body.classList.add('playing'));
+  wavesurfer.on('pause',  () => document.body.classList.remove('playing'));
+  wavesurfer.on('finish', () => nextSong());
+
+  wavesurfer.on('error', (err) => {
+    console.error('WaveSurfer error:', err);
+    showToast('Could not load audio — check the file is in your repo');
+    document.body.classList.remove('playing');
+  });
 
   // Apply current volume
   const vol = parseInt(document.getElementById('volume').value) / 100;
@@ -98,55 +72,60 @@ function initWaveSurfer() {
 
 // ── LOAD SONG ─────────────────────────────────────────────
 async function loadSong(idx) {
-  if (isFading) return;
+  if (isFading || songs.length === 0) return;
   isFading = true;
 
-  // Fade out overlay
+  // Fade overlay in
   const overlay = document.getElementById('fade-overlay');
   overlay.style.opacity = '0.55';
-  await delay(300);
+  await delay(280);
 
   currentIdx = ((idx % songs.length) + songs.length) % songs.length;
   const song = songs[currentIdx];
 
-  // Update album art with crossfade
+  // Album art crossfade
   const art = document.getElementById('album-art');
   art.style.opacity = '0';
   setTimeout(() => {
-    art.src = song.cover;
-    art.onload = () => { art.style.opacity = '1'; };
+    if (song.cover) {
+      art.src    = song.cover;
+      art.onload = () => { art.style.opacity = '1'; };
+      art.onerror = () => { art.style.opacity = '1'; };
+    } else {
+      art.src           = '';
+      art.style.opacity = '1';
+    }
   }, 100);
 
-  // Update track info
+  // Track info
   document.getElementById('track-title').textContent  = song.title;
-  document.getElementById('track-artist').textContent = song.artist;
+  document.getElementById('track-artist').textContent = song.artist + (song.album ? ' — ' + song.album : '');
 
-  // Highlight active row + toggle animated bars
+  // Highlight active row
   document.querySelectorAll('.song-item').forEach((el, i) => {
     el.classList.toggle('active', i === currentIdx);
-    const numEl  = el.querySelector('.song-num > span');
-    const barsEl = el.querySelector('.playing-bars');
-    numEl.style.display  = i === currentIdx ? 'none' : 'block';
-    barsEl.style.display = i === currentIdx ? 'flex'  : 'none';
+    el.querySelector('.song-num > span').style.display = i === currentIdx ? 'none'  : 'block';
+    el.querySelector('.playing-bars').style.display    = i === currentIdx ? 'flex'  : 'none';
   });
 
-  // Init WaveSurfer and load audio
+  // Init WaveSurfer and load
   initWaveSurfer();
   wavesurfer.load(song.src);
 
-  // Fade in
+  // Fade overlay out
   overlay.style.opacity = '0';
   isFading = false;
 }
 
 // ── NEXT / PREV ───────────────────────────────────────────
 function nextSong() {
+  if (!songs.length) return;
   loadSong((currentIdx + 1) % songs.length);
 }
 
 function prevSong() {
-  const target = currentIdx <= 0 ? songs.length - 1 : currentIdx - 1;
-  loadSong(target);
+  if (!songs.length) return;
+  loadSong(currentIdx <= 0 ? songs.length - 1 : currentIdx - 1);
 }
 
 // ── CONTROL BINDINGS ──────────────────────────────────────
@@ -161,66 +140,84 @@ document.getElementById('btn-play').addEventListener('click', () => {
 document.getElementById('btn-prev').addEventListener('click', prevSong);
 document.getElementById('btn-next').addEventListener('click', nextSong);
 
-// Volume slider with live gradient fill
+// Volume
 const volInput = document.getElementById('volume');
 volInput.addEventListener('input', () => {
   const v = parseInt(volInput.value) / 100;
   if (wavesurfer) wavesurfer.setVolume(v);
-  volInput.style.background = `linear-gradient(to right, var(--accent) ${volInput.value}%, var(--border) ${volInput.value}%)`;
+  volInput.style.background =
+    `linear-gradient(to right, var(--accent) ${volInput.value}%, var(--border) ${volInput.value}%)`;
 });
-// Set initial gradient
 volInput.style.background = `linear-gradient(to right, var(--accent) 70%, var(--border) 70%)`;
 
-// Download current track
+// Download
 document.getElementById('btn-download').addEventListener('click', () => {
   if (currentIdx === -1) { showToast('No track loaded.'); return; }
   const song = songs[currentIdx];
-  const link = document.createElement('a');
-  link.href     = song.src;
-  link.download = song.title + '.mp3';
-  link.click();
+  const a = document.createElement('a');
+  a.href     = song.src;
+  a.download = song.title + '.mp3';
+  a.click();
   showToast('Download started — ' + song.title);
 });
 
 // ── BUILD SONG LIST ───────────────────────────────────────
 const list = document.getElementById('song-list');
-songs.forEach((song, i) => {
-  const row = document.createElement('div');
-  row.className   = 'song-item';
-  row.dataset.idx = i;
-  row.innerHTML   = `
-    <div class="song-num">
-      <span style="display:block">${i + 1}</span>
-      <div class="playing-bars" style="display:none">
-        <span></span><span></span><span></span>
+
+if (songs.length === 0) {
+  list.innerHTML = `
+    <div style="padding:60px 28px;text-align:center;font-family:var(--font-mono);
+                font-size:.75rem;color:var(--muted);line-height:2;">
+      No tracks in library.<br>
+      <a href="admin.html" style="color:var(--accent);text-decoration:none;">
+        Open admin.html →
+      </a> to add your music.
+    </div>`;
+} else {
+  songs.forEach((song, i) => {
+    const row = document.createElement('div');
+    row.className   = 'song-item';
+    row.dataset.idx = i;
+    row.innerHTML = `
+      <div class="song-num">
+        <span style="display:block">${i + 1}</span>
+        <div class="playing-bars" style="display:none">
+          <span></span><span></span><span></span>
+        </div>
       </div>
-    </div>
-    <div class="song-info">
-      <div class="song-title">${song.title}</div>
-      <div class="song-artist">${song.artist}</div>
-    </div>
-    <div class="song-album">${song.album}</div>
-    <div class="song-dur">${song.duration}</div>
-  `;
-  row.addEventListener('click', () => loadSong(i));
-  list.appendChild(row);
-});
+      <div class="song-info">
+        <div class="song-title">${escHtml(song.title)}</div>
+        <div class="song-artist">${escHtml(song.artist)}</div>
+      </div>
+      <div class="song-album">${escHtml(song.album || '')}</div>
+      <div class="song-dur">${escHtml(song.duration || '—')}</div>
+    `;
+    row.addEventListener('click', () => loadSong(i));
+    list.appendChild(row);
+  });
+}
 
 // ── HELPERS ───────────────────────────────────────────────
 function formatTime(s) {
-  if (isNaN(s)) return '0:00';
+  if (!s || isNaN(s)) return '0:00';
   const m   = Math.floor(s / 60);
   const sec = Math.floor(s % 60);
   return m + ':' + String(sec).padStart(2, '0');
 }
 
 function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise(r => setTimeout(r, ms));
 }
 
 function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2800);
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
 }
+
+function escHtml(str) {
+  return String(str || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+                }
