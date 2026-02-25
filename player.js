@@ -27,7 +27,8 @@ const categories = [
     label: "Rap",
     color: "#b5ff47",
     songs: [
-      { title: "Mockingbird (Rap 2026)", artist: "Dj Online", src: "Rap/Mockingbird-(Rap-2026).mp3", duration: "0:00" },
+      { title: "Mockingbird (Rap 2026)",       artist: "Dj Online", src: "Rap/Mockingbird-(Rap-2026).mp3",       duration: "0:00" },
+      { title: "Ordinary (Remix 2026)",          artist: "Dj Online", src: "Rap/Ordinary-(Remix-2026).mp3",         duration: "0:00" },
     ]
   },
   {
